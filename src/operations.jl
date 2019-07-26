@@ -149,19 +149,23 @@ Base.eltype(f::Filter) = eltype(f.x)
  @inline function Base.iterate(f::Filter)
     state = iterate(f.x)
     state === nothing && return nothing
-    while !f.f(state[1])
-        state = iterate(f.x, state[2])
+    @inbounds row, st = state[1], state[2]
+    while !f.f(row)
+        state = iterate(f.x, st)
         state === nothing && return nothing
+        @inbounds row, st = state[1], state[2]
     end
-    return state
+    return row, st
 end
 
  @inline function Base.iterate(f::Filter, st)
     state = iterate(f.x, st)
     state === nothing && return nothing
-    while !f.f(state[1])
-        state = iterate(f.x, state[2])
+    @inbounds row, st = state[1], state[2]
+    while !f.f(row)
+        state = iterate(f.x, st)
         state === nothing && return nothing
+        @inbounds row, st = state[1], state[2]
     end
-    return state
+    return row, st
 end
