@@ -50,7 +50,7 @@ Base.eltype(x::RowIterator{T}) where {T} = ColumnsRow{T}
 Base.length(x::RowIterator) = x.len
 schema(x::RowIterator) = schema(x.columns)
 
-function Base.iterate(rows::RowIterator, st=1)
+@inline function Base.iterate(rows::RowIterator, st=1)
     st > length(rows) && return nothing
     return ColumnsRow(rows.columns, st), st + 1
 end

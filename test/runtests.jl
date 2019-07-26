@@ -548,6 +548,12 @@ table = ctable |> Tables.select(3, 1) |> Tables.rowtable
 @test isequal(ctable.A, map(x->x.A, table))
 @test isequal(ctable[1], map(x->x[2], table))
 
+# Tables.filter
+@test length((Tables.filter(x->x.B == 2.0, ctable) |> Tables.columntable).B) == 1
+@test length((Tables.filter(x->x.B == 2.0, rtable) |> Tables.columntable).B) == 1
+@test length(Tables.filter(x->x.B == 2.0, ctable) |> Tables.rowtable) == 1
+@test length(Tables.filter(x->x.B == 2.0, rtable) |> Tables.rowtable) == 1
+
 end
 
 @testset "TableTraits integration" begin
